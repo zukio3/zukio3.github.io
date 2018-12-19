@@ -2,6 +2,8 @@ body {
   background-color: #EA899A;
   display: grid;
   grid-template-rows: 120px 1fr;
+  padding: 0px;
+  margin: 0px;
 }
 
 .navbar{
