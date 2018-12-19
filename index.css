@@ -1,5 +1,5 @@
 body {
-  background-color: #D36E70;
+  background-color: #EA899A;
   display: grid;
   grid-template-rows: 120px 1fr;
 }
@@ -12,6 +12,7 @@ body {
   color: #FDFDFD;
   text-align: center;
   align-items: center;
+  background-color: #D36E70;
 }
 
 #header-inner {
