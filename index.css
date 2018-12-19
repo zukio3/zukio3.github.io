@@ -13,6 +13,8 @@ body {
   text-align: center;
   align-items: center;
   background-color: #D36E70;
+  padding: 0px;
+  margin: 0px;
 }
 
 #header-inner {
