@@ -9,7 +9,9 @@ body {
   display: grid;
   grid-template-columns: 60px 1fr 60px;
   font-size: 24pt;
+  color: #FDFDFD;
   text-align: center;
+  align-items: center;
 }
 
 .navbar .menuicon {
