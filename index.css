@@ -1,4 +1,17 @@
 body {
-  background-color: #FDFDFD;
+  background-color: #D36E70;
+  display: grid;
+  grid-template-rows: 120px 1fr;
+}
+
+.navbar{
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: 60px 1fr 60px;
+  font-size: 24pt;
   text-align: center;
+}
+
+.navbar .menuicon {
+
 }
