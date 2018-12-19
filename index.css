@@ -14,6 +14,14 @@ body {
   align-items: center;
 }
 
-.navbar .menuicon {
+#header-inner {
+  display: none;
+}
 
+#b-navbar {
+  display: none;
+}
+
+#Attribution1 {
+  display: none;
 }
