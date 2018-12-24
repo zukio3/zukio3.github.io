@@ -240,6 +240,7 @@
 							locations.cities[0]["lon"] = lon;
 							locations.cities[0]["alt"] = 0.0;
 							locations.cities[0]["def"] = now.gmtdiff();
+							locations.cities[0]["name"] = geo.getCityName();
 							return true;
 						},
 					// 取得失敗した場合
@@ -263,7 +264,7 @@
 					);
 				},
 				getCityName: function() {
-							
+					return "現在の位置";
 				}
 			}
 			
@@ -305,7 +306,7 @@
 				],
 				builder: function(idval) {
 					var s = geo.getPosition();
-					
+					alert('geo.getPosition = ' + s);
 					for(var i = 0; i < locations.cities.length; i++) {
 		    			var op = document.createElement("option");
 		    			op.value = locations.cities[i]["id"];
