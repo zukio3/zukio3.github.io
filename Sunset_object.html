@@ -226,12 +226,13 @@
 			var geo = {
 				longitude: "",
 				latitude: "",
+				success: "tba",
 				
 				getPosition: function() {
 					navigator.geolocation.getCurrentPosition(
 					// 取得成功した場合
 						function(position) {
-							alert("緯度:"+position.coords.latitude+",経度"+position.coords.longitude);
+							//alert("緯度:"+position.coords.latitude+",経度"+position.coords.longitude);
 							geo.longitude = position.coords.longitude;
 							geo.latitude = position.coords.latitude;
 							var lat = Math.floor(position.coords.latitude*10000)/10000;
@@ -241,7 +242,7 @@
 							locations.cities[0]["alt"] = 0.0;
 							locations.cities[0]["def"] = now.gmtdiff();
 							locations.cities[0]["name"] = geo.getCityName();
-							return true;
+							geo.success = true;
 						},
 					// 取得失敗した場合
 						function(error) {
@@ -259,9 +260,10 @@
 									alert("その他のエラー(エラーコード:"+error.code+")");
 									break;
 							};
-							return false;
+							geo.success = false;
 						}
 					);
+					return geo.success;
 				},
 				getCityName: function() {
 					return "現在の位置";
@@ -306,7 +308,6 @@
 				],
 				builder: function(idval) {
 					var s = geo.getPosition();
-					alert('geo.getPosition = ' + s);
 					for(var i = 0; i < locations.cities.length; i++) {
 		    			var op = document.createElement("option");
 		    			op.value = locations.cities[i]["id"];
@@ -453,6 +454,10 @@
 				locations.builder('cities');
 				setInterval("display.init()", 1000);
 			}
+			
+			//function dev() {
+			//	alert(geo.success);
+			//}
 		</script>
 		<style type="text/css">
 		</style>
@@ -480,7 +485,9 @@
 			<span id="date"></span>
 		</div>
 		<div class="dev">
-		<span>last edit comment = builder edit 01</span>
+		<span>last edit comment = builder edit 02</span>
+		<br>
+		<button type="button" onclick="dev()">dev function</button>
 		</div>
 	</body>
 </HTML>
