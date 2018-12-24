@@ -308,17 +308,23 @@
 				],
 				builder: function(idval) {
 					var s = geo.getPosition();
+					
+					var select = document.getElementById(idval);
+					while (0 < select.childNodes.length) {
+						select.removeChild(select.childNodes[0]);
+					}
+					
 					for(var i = 0; i < locations.cities.length; i++) {
 		    			var op = document.createElement("option");
 		    			op.value = locations.cities[i]["id"];
 		    			op.text = locations.cities[i]["name"];
-		    			document.getElementById(idval).appendChild(op);
+		    			select.appendChild(op);
 					}
 					if (s == true) { // current location set
-						document.getElementById(idval).selectedIndex = 0;
+						select.selectedIndex = 0;
 					} else { // current location not obtained
 						if (locations.init == true) {
-							document.getElementById(idval).selectedIndex = 10;
+							select.selectedIndex = 10;
 							locations.init = false;
 						}
 					}
@@ -485,7 +491,7 @@
 			<span id="date"></span>
 		</div>
 		<div class="dev">
-		<span>last edit comment = builder edit 02</span>
+		<span>last edit comment = builder edit 03</span>
 		<br>
 		<button type="button" onclick="dev()">dev function</button>
 		</div>
