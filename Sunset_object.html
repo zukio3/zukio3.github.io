@@ -8,7 +8,7 @@
 	<body onload="init()">
 	 	<div class="geo">
 			<div id="getlocation">
-				<button type="button" onclick="locations.builder()">位置情報を取得</button>
+				<button type="button" onclick="geo.getPosition()">位置情報を取得</button>
 			</div>
 			<div id="selectlocation">
 				<select id="cities" onchange="display.init()"></select>
@@ -28,12 +28,27 @@
 			<span id="date"></span>
 		</div>
 		<div class="dev">
-		<span>last edit comment = time adjustment</span>
+		<span>geolocation trigger adjusted</span>
 		<br>
 		<button type="button" onclick="dev()">dev function</button>
 		</div>
 		
 		<script type="text/javascript">
+			var settings = {
+				commentId: 'comment',
+				daysId: 'days',
+				hoursId: 'hours',
+				minutesId: 'minutes',
+				secondsId: 'seconds',
+				refreshRate: 1000,
+				getLocationOnLoad: true,
+			}
+			
+			function dev() {
+				//console.log('date getnextday fri' + date.getNextDay(5));
+				//console.log('difft5 days' + timer.difft(5).getDate());
+			}
+		
 			function sind(d) {
 				return Math.sin(d*Math.PI/180);
 			}
@@ -270,13 +285,10 @@
 			var geo = {
 				longitude: "",
 				latitude: "",
-				success: "tba",
-				
 				getPosition: function() {
+					//console.log('geo getposition called');
 					navigator.geolocation.getCurrentPosition(
-					// 取得成功した場合
-						function(position) {
-							//alert("緯度:"+position.coords.latitude+",経度"+position.coords.longitude);
+						function (position) {
 							geo.longitude = position.coords.longitude;
 							geo.latitude = position.coords.latitude;
 							var lat = Math.floor(position.coords.latitude*10000)/10000;
@@ -286,10 +298,9 @@
 							locations.cities[0]["alt"] = 0.0;
 							locations.cities[0]["def"] = now.gmtdiff();
 							locations.cities[0]["name"] = geo.getCityName();
-							geo.success = true;
+							locations.builder(true);
 						},
-					// 取得失敗した場合
-						function(error) {
+						function (error) {
 							geo.success = false;
 							switch(error.code) {
 								case 1: //PERMISSION_DENIED
@@ -305,12 +316,10 @@
 									alert("その他のエラー(エラーコード:"+error.code+")");
 									break;
 							}
-						},
-						function(option) {
-							return geo.success;
-						}
+							locations.builder(false);
+						}	
 					);
-					return geo.success;
+					//console.log('geo getposition complete');
 				},
 				getCityName: function() {
 					return "現在の位置";
@@ -318,7 +327,6 @@
 			}
 			
 			var locations = {
-				init: true,
 				targetid: "",
 				cities: [
 					{"id": 0, "lat": 0, "lon": 0, "alt": 0.0, "def": 0, "name": ""},
@@ -354,35 +362,36 @@
 					{"id": 30, "lat": -23.3200, "lon": -46.3800, "alt": 0.0, "def": -3, "name": "サンパウロ"},
 					{"id": 31, "lat": -12.0600, "lon": -77.0200, "alt": 0.0, "def": -5, "name": "リマ"},
 				],
-				builder: function() {
-					console.log('locations builder init = ' + locations.init);
-					if (locations.init == false) {
-						var s = geo.getPosition();
+				builder: function(bool) {
+					var con = bool;
+					if (bool == undefined) {
+						//console.log('builder argument undefined');
+						con = false;
+					} else if (bool == true || bool == false) {
+						//console.log('builder argument as expected');
 					} else {
-						var s = false;
-						
+						console.error('builder argument unexpected ' + bool);
 					}
+					
+					//console.log('cleanup started');
 					var select = document.getElementById(locations.targetid);
 					while (0 < select.childNodes.length) { // cleanup
 						select.removeChild(select.childNodes[0]);
 					}
 					
+					//console.log('construction started');
 					for(var i = 0; i < locations.cities.length; i++) { // construct
 		    			var op = document.createElement("option");
 		    			op.value = locations.cities[i]["id"];
 		    			op.text = locations.cities[i]["name"];
 		    			select.appendChild(op);
 					}
-					if (s == true) { // current location set
-						select.selectedIndex = 0;
-					} else if (s == false) { // current location not obtained
-						if (locations.init == true) {
-							select.selectedIndex = 10;
-						}
-					} else {
-						console.log('geo.getposition result undefined ' + geo.getPosition())
+					
+					if (con == true) { // current location set
+						select.selectedIndex = 0; // slect current location
+					} else { // current location not obtained
+						select.selectedIndex = 10; // select Tokyo
 					}
-					locations.init = false;
 				},
 				reader: function() {
 					var ref = document.getElementById(locations.targetid).value;
@@ -490,19 +499,19 @@
 			
 			function init() {
 				locations.targetid = 'cities';
-				display.id0 = 'comment';
-				display.id1 = 'days';
-				display.id2 = 'hours';
-				display.id3 = 'minutes';
-				display.id4 = 'seconds';
-				setInterval("display.init()", 1000);
-				locations.builder();
+				if (settings.getLocationsOnLoad == true) {
+					geo.getPosition();
+				} else {
+					locations.builder();
+				};
+				display.id0 = settings.commentId;
+				display.id1 = settings.daysId;
+				display.id2 = settings.hoursId;
+				display.id3 = settings.minutesId;
+				display.id4 = settings.secondsId;
+				display.init();
+				setInterval("display.init()", settings.refreshRate);
 				//display.init();
-			}
-			
-			function dev() {
-				console.log('date getnextday fri' + date.getNextDay(5));
-				console.log('difft5 days' + timer.difft(5).getDate());
 			}
 		</script>
 	</body>
