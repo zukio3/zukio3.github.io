@@ -2,6 +2,37 @@
 <head>
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>7th Day Sabbath Timer</title>
+		<style type="text/css">
+		</style>
+	</head>
+	<body onload="init()">
+	 	<div class="geo">
+			<div id="getlocation">
+				<button type="button" onclick="locations.builder()">位置情報を取得</button>
+			</div>
+			<div id="selectlocation">
+				<select id="cities" onchange="display.init()"></select>
+			</div>
+		</div>
+		<div class="daycount">
+			<span id="comment"></span>
+			<br>
+			<span id="days"></span>
+		</div>
+		<div class="timecount">
+			<span id="hours"></span>
+			<span id="minutes"></span>
+			<span id="seconds"></span>
+		</div>
+		<div class="today">
+			<span id="date"></span>
+		</div>
+		<div class="dev">
+		<span>last edit comment = time adjustment</span>
+		<br>
+		<button type="button" onclick="dev()">dev function</button>
+		</div>
+		
 		<script type="text/javascript">
 			function sind(d) {
 				return Math.sin(d*Math.PI/180);
@@ -11,6 +42,20 @@
 			}
 			function tand(d) {
 				return Math.tan(d*Math.PI/180);
+			}
+			
+			var date = {
+				getNextDay: function(day) { // 0 (Sun) - 6 (Sat)
+					var tw = new Date();
+					var d;
+					if (day >= tw.getDay()) { // same or upcoming day of the week
+						d = day - tw.getDay();
+					} else { // day of the next week
+						d = day + 7 - tw.getDay();
+					}
+					tw.setDate(tw.getDate() + d);
+					return tw;
+				},
 			}
 			
 			var sunset = {
@@ -23,15 +68,14 @@
 				dd: "",
 				total: "",
 				
-				loader: function(idval) { // return syntax: y, m, d, lat, lon, alt, def
+				loader: function() { // return syntax: y, m, d, lat, lon, alt, def
 					sunset.yr = now.ymd()[0];
 					sunset.mo = now.ymd()[1];
 					sunset.dd = now.ymd()[2];
-					
-					sunset.lat = locations.reader(idval)[0];
-					sunset.lon = locations.reader(idval)[1];
-					sunset.alt = locations.reader(idval)[2];
-					sunset.def = locations.reader(idval)[3];
+					sunset.lat = locations.reader()[0];
+					sunset.lon = locations.reader()[1];
+					sunset.alt = locations.reader()[2];
+					sunset.def = locations.reader()[3];
 					return [sunset.yr, sunset.mo, sunset.dd, sunset.lat, sunset.lon, sunset.alt, sunset.def];
 				},
 				
@@ -143,14 +187,14 @@
 					if(dr < 0) dr += 360;
 					return dr;
 				},
-				main: function(idval) {
-					yy = sunset.loader(idval)[0];
-					mm = sunset.loader(idval)[1];
-					dd = sunset.loader(idval)[2];
-					la = sunset.loader(idval)[3];
-					lo = sunset.loader(idval)[4];
-					alt = sunset.loader(idval)[5];
-					i = sunset.loader(idval)[6];
+				main: function(date, location) {
+					yy = date.getFullYear();
+					mm = date.getMonth();
+					dd = date.getDate();
+					la = location[0];
+					lo = location[1];
+					alt = location[2];
+					i = location[3];
 					
 					t = sunset.jy(yy,mm,dd-1,23,59,0,i);
 					th = sunset.sh(t,23,59,0,lo,i);
@@ -179,7 +223,7 @@
 					   
 							if((pht>t4)&&(ht<t4)) { 
 								ans = hh + "時" + m + "分 日没(方位" + Math.floor(dr) +"度)\n" ;
-								target = (hh*60+m)*60;
+								target = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hh, m);
 							}
 							pht = ht ;
 							pdr = dr ;
@@ -198,7 +242,7 @@
 				ymd: function() {
 					nw = new Date();
 					now.yy = nw.getFullYear();
-					now.mm = nw.getMonth();
+					now.mm = nw.getMonth() + 1;
 					now.dd = nw.getDate();
 					format = [now.yy, now.mm, now.dd];
 					return format;
@@ -246,6 +290,7 @@
 						},
 					// 取得失敗した場合
 						function(error) {
+							geo.success = false;
 							switch(error.code) {
 								case 1: //PERMISSION_DENIED
 									alert("位置情報の利用が許可されていません");
@@ -259,8 +304,10 @@
 								default:
 									alert("その他のエラー(エラーコード:"+error.code+")");
 									break;
-							};
-							geo.success = false;
+							}
+						},
+						function(option) {
+							return geo.success;
 						}
 					);
 					return geo.success;
@@ -272,6 +319,7 @@
 			
 			var locations = {
 				init: true,
+				targetid: "",
 				cities: [
 					{"id": 0, "lat": 0, "lon": 0, "alt": 0.0, "def": 0, "name": ""},
 					{"id": 1, "lat": 26.2167, "lon": 127.6667, "alt": 0.0, "def": 9, "name": "那覇"},
@@ -306,15 +354,20 @@
 					{"id": 30, "lat": -23.3200, "lon": -46.3800, "alt": 0.0, "def": -3, "name": "サンパウロ"},
 					{"id": 31, "lat": -12.0600, "lon": -77.0200, "alt": 0.0, "def": -5, "name": "リマ"},
 				],
-				builder: function(idval) {
-					var s = geo.getPosition();
-					
-					var select = document.getElementById(idval);
-					while (0 < select.childNodes.length) {
+				builder: function() {
+					console.log('locations builder init = ' + locations.init);
+					if (locations.init == false) {
+						var s = geo.getPosition();
+					} else {
+						var s = false;
+						
+					}
+					var select = document.getElementById(locations.targetid);
+					while (0 < select.childNodes.length) { // cleanup
 						select.removeChild(select.childNodes[0]);
 					}
 					
-					for(var i = 0; i < locations.cities.length; i++) {
+					for(var i = 0; i < locations.cities.length; i++) { // construct
 		    			var op = document.createElement("option");
 		    			op.value = locations.cities[i]["id"];
 		    			op.text = locations.cities[i]["name"];
@@ -322,15 +375,17 @@
 					}
 					if (s == true) { // current location set
 						select.selectedIndex = 0;
-					} else { // current location not obtained
+					} else if (s == false) { // current location not obtained
 						if (locations.init == true) {
 							select.selectedIndex = 10;
-							locations.init = false;
 						}
+					} else {
+						console.log('geo.getposition result undefined ' + geo.getPosition())
 					}
+					locations.init = false;
 				},
-				reader: function(idval) {
-					var ref = document.getElementById(idval).value;
+				reader: function() {
+					var ref = document.getElementById(locations.targetid).value;
 					target = [];
 					for (var i = 0; i < locations.cities.length; i++) {
 						if (locations.cities[i]["id"] == ref) {
@@ -349,67 +404,49 @@
 				hr: "",
 				min: "",
 				sec: "",
-				preSunset: function(idval) {
-					if (timer.difft(idval) < 0) {
+				
+				preSabbath: function() {
+					today = new Date();
+					if (today < sunset.main(date.getNextDay(5), locations.reader())) {
+						return true;
+					} else if (today < sunset.main(date.getNextDay(6), locations.reader())) {
 						return false;
-					} else {
+					} else if (today > sunset.main(date.getNextDay(6), locations.reader())) {
 						return true;
+					} else {
+						//console.log('Error: function preSabbath');
 					}
 				},
-				preSabbath: function(idval) {
-					today = now.day();
-					if (today < 5) { // Sun-Thu
-						return true;
-					} else if (today == 5) {
-						if (timer.preSunset(idval) == true) { // Fri pre-sunset
-							return true;
-						} else { // Fri post-sunset
-							return false;
-						}
-					} else {
-						if (timer.preSunset(idval) == true) { // Sat pre-sunset
-							return false;
-						} else { // Sat post-sunset
-							return true;
-						}
-					}
-				},
-				difft: function(idval) {
-					//console.log('timer.difft called');
+				difft: function(day) {
 					var nw = new Date();
-					var day = nw.getDay();
-					var hr = nw.getHours();
-					var min = nw.getMinutes();
-					var sec = nw.getSeconds();
-					let nowsec = hr*3600 + min*60 + sec;
-					var diff = sunset.main(idval) - nowsec;
+					var diff = sunset.main(date.getNextDay(day), locations.reader());
+					diff.setYear(diff.getFullYear() - nw.getFullYear());
+					diff.setMonth(diff.getMonth() - nw.getMonth());
+					diff.setDate(diff.getDate() - nw.getDate());
+					diff.setHours(diff.getHours() - nw.getHours());
+					diff.setMinutes(diff.getMinutes() - nw.getMinutes());
+					diff.setSeconds(diff.getSeconds() - nw.getSeconds());
 					return diff;
 				},
-				timer: function(idval) {
-					var diff;
-					if (timer.preSunset(idval) == true) {
-						diff = timer.difft(idval);
+				timer: function() {
+					//console.log('timer.timer called');
+					var dday, dhr, dmin, dsec;
+					if (timer.preSabbath() == true) {
+						dday = timer.difft(5).getDate();
+						dhr = timer.difft(5).getHours();
+						dmin = timer.difft(5).getMinutes();
+						dsec = timer.difft(5).getSeconds();
 					} else {
-						diff = timer.difft(idval) + 24*3600;
-					};
-					var dday;
-					if (timer.preSabbath(idval) == true) {
-						dday = 5 - now.day();
-					} else {
-						dday = 6 - now.day();
-					};
-					var dhr = Math.floor(diff/3600);
-					var dmin = Math.floor((diff%3600)/60);
-					var dsec = diff%3600%60;
-					/* timer.day = dday;
-					timer.hr = dhr;
-					timer.min = dmin;
-					timer.sec = dsec; */ 
+						dday = timer.difft(6).getDate();
+						dhr = timer.difft(6).getHours();
+						dmin = timer.difft(6).getMinutes();
+						dsec = timer.difft(6).getSeconds();
+					}
+					//console.log('timer.timer dday' + dday);
 					return	[dday, dhr, dmin, dsec];
 				}
 			}
 			var display = {
-				idval: "",
 				id0: "",
 				id1: "",
 				id2: "",
@@ -417,32 +454,33 @@
 				id4: "",
 				init: function() {
 					//console.log('display.init called');
-					display.message(display.idval, display.id0);
-					display.timer(display.idval, display.id1, display.id2, display.id3, display.id4);
+					display.message(display.id0);
+					display.timer(display.id1, display.id2, display.id3, display.id4);
 					display.today();
 				},
-				message: function(idval, id0) {
+				message: function(id0) {
 					//console.log('display.message called');
 					var text;
-					if (timer.preSabbath(idval) == true) {
+					if (timer.preSabbath() == true) {
 						text = "安息日まで";
 					} else {
 						text = "安息日終了まで";
 					}
 					document.getElementById(id0).innerText = text;
 				},
-				timer: function(idval, id1, id2, id3, id4) {
+				timer: function(id1, id2, id3, id4) {
 					//console.log('display.timer called');
-					ddd = timer.timer(idval)[0] + "日";
-					dhh = timer.timer(idval)[1] + "時間";
-					dmm = timer.timer(idval)[2] + "分";
-					dss = timer.timer(idval)[3] + "秒";
+					ddd = timer.timer()[0] + "日";
+					dhh = timer.timer()[1] + "時間";
+					dmm = timer.timer()[2] + "分";
+					dss = timer.timer()[3] + "秒";
 					document.getElementById(id1).innerText = ddd;
 					document.getElementById(id2).innerText = dhh;
 					document.getElementById(id3).innerText = dmm;
 					document.getElementById(id4).innerText = dss;
 				},
 				today: function() {
+					//console.log('display.today called');
 					yyyy = now.ymd()[0];
 					mm = now.ymd()[1];
 					dd = now.ymd()[2];
@@ -451,49 +489,21 @@
 			}
 			
 			function init() {
-				display.idval = 'cities';
+				locations.targetid = 'cities';
 				display.id0 = 'comment';
 				display.id1 = 'days';
 				display.id2 = 'hours';
 				display.id3 = 'minutes';
 				display.id4 = 'seconds';
-				locations.builder('cities');
 				setInterval("display.init()", 1000);
+				locations.builder();
+				//display.init();
 			}
 			
-			//function dev() {
-			//	alert(geo.success);
-			//}
+			function dev() {
+				console.log('date getnextday fri' + date.getNextDay(5));
+				console.log('difft5 days' + timer.difft(5).getDate());
+			}
 		</script>
-		<style type="text/css">
-		</style>
-	</head>
-	<body onload="init()">
-	 	<div class="geo">
-			<div id="getlocation">
-				<button type="button" onclick="locations.builder('cities')">位置情報を取得</button>
-			</div>
-			<div id="selectlocation">
-				<select id="cities" onchange="display.init()"></select>
-			</div>
-		</div>
-		<div class="daycount">
-			<span id="comment"></span>
-			<br>
-			<span id="days"></span>
-		</div>
-		<div class="timecount">
-			<span id="hours"></span>
-			<span id="minutes"></span>
-			<span id="seconds"></span>
-		</div>
-		<div class="today">
-			<span id="date"></span>
-		</div>
-		<div class="dev">
-		<span>last edit comment = builder edit 03</span>
-		<br>
-		<button type="button" onclick="dev()">dev function</button>
-		</div>
 	</body>
 </HTML>
