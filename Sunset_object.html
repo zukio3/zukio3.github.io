@@ -3,6 +3,9 @@
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 	<title>7th Day Sabbath Timer</title>
 		<style type="text/css">
+			.div {
+				display: none;
+			}
 		</style>
 	</head>
 	<body onload="init()">
@@ -28,7 +31,7 @@
 			<span id="date"></span>
 		</div>
 		<div class="dev">
-		<span>geolocation trigger adjusted</span>
+		<span>time zone difference adjusted</span>
 		<br>
 		<button type="button" onclick="dev()">dev function</button>
 		</div>
@@ -428,11 +431,12 @@
 				},
 				difft: function(day) {
 					var nw = new Date();
+					var adj = nw.getTimezoneOffset()/(-60) - locations.reader()[3];
 					var diff = sunset.main(date.getNextDay(day), locations.reader());
 					diff.setYear(diff.getFullYear() - nw.getFullYear());
 					diff.setMonth(diff.getMonth() - nw.getMonth());
 					diff.setDate(diff.getDate() - nw.getDate());
-					diff.setHours(diff.getHours() - nw.getHours());
+					diff.setHours(diff.getHours() - nw.getHours() + adj);
 					diff.setMinutes(diff.getMinutes() - nw.getMinutes());
 					diff.setSeconds(diff.getSeconds() - nw.getSeconds());
 					return diff;
