@@ -6,200 +6,280 @@
 		<style type="text/css">
 			@import url("https://fonts.googleapis.com/css?family=Lato");
 			
-			.dev {
-				display: none;
-			}
-			
 			body {
-				background-image: url("https://zukio3.github.io/img/bookshelf.jpeg");
-				padding: 0px;
-				margin: 0px;
+				margin: 5vw;
+				background: #111;
+				height: 100vh;
 				font-family: Lato, Arial;
+				max-height: 500px;
+				background: url("https://zukio3.github.io/img/bookshelf.jpeg");
 			}
 			
-			a {
-				text-decoration: none;
+			/* chrome safari opera */
+			@media screen and (-webkit-min-device-pixel-ratio: 0) {
+				.main {
+					backdrop-filter: blur(10px);
+					background: initial;
+				}
+				
+				.today {
+					background: initial;
+				}
 			}
+			
+			/* Edge */
+			@supports (-ms-ime-align: auto) {
+				.main {
+					backdrop-filter: blur(10px);
+					background: initial;
+				}
+				
+				.today {
+					background: initial;
+				}
+			}
+			
 			.main {
-				padding: 5vw;
-				background-color: rgba(250,250,250,0.4);
-				min-height: 90vh;
+				height: 100%;
+				border-radius: 0.2vw;
 				display: grid;
-				grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-				grid-template-rows: 2fr 1fr 2.5fr 2fr 1fr;
+				grid-template-rows: 3fr 2fr 4fr 3fr 2fr;
+				background: radial-gradient(ellipse farthest-corner at 50% 20%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.1) 65%), linear-gradient(-115deg, rgba(255,255,255,0), rgba(255,255,255,0) 10%, rgba(255,255,255,0.15) 30%, rgba(255,255,255,0) 30%), linear-gradient(-115deg, rgba(255,255,255,0), rgba(255,255,255,0) 5%, rgba(255,255,255,0.07) 27%, rgba(255,255,255,0) 27%), rgba(255,255,255,0.3);
+				outline: 0.2vw solid rgba(255,255,255,0.7);
+				outline-offset: 0.5vw;
+				position: relative;
+				padding: 5% 0px 10% 0px;
+			}
+			
+			.input {
+				grid-row: 1;
+				display: grid;
+				grid-template-columns: 15% 1fr 15%;
+				margin: 0px 5% 0px 5%;
+				position: relative;
+				font-size: 200%;
+			}
+			
+			.row1 {
+				width: 100%;
+				height: 100%;
 				text-align: center;
-			}
-			
-			.main * {
-				display: inline-box;
-				margin: 0;
-				padding: 0;
-			}
-			.getlocation {
-				grid-column: 2/7;
-				grid-row: 1/2;
-				height: 100%;
-				font-size: 7vw;
-				background-color: #DDD;
-			}
-			
-			.getlocation .fas {
-				background-color: #FFF;
-				/*margin-top: 5vw;*/
-			}
-			
-			.cityname {
-				grid-row: 1;
-				grid-column: 2/6;
-				font-size: 8vw;
-				height: 100%;
-				background-color: #DDD;
-			}
-			
-			.cityname span {
-				background-color: #FFF;
-				margin: 0;
-			}
-			
-			.arrow {
-				grid-row: 1;
-				grid-column: 6/7;
-				font-size: 8vw;
-				background-color: #DDD;
-			}
-			
-			.arrow span {
-				margin-bottom: 5vw;
-				background-color: #FFF;
-			}
-			.selection {
-				grid-column: 2/7;
-				grid-row: 1/2;
-				background-color: rgba(255, 255, 255, 0);
-				overflow: hidden;
+				display: grid;
 				align-items: center;
+				
+			}
+			
+			.geobutton {
+				grid-column: 1/2;
+			}
+			
+			.selection {
+				grid-column: 2/4;
+				position: absolute;
+				z-index: 2;
+				border: 0.05em solid rgba(80,80,80,0.5);
+				cursor: pointer;
+				height: 100%;
+				
 			}
 			
 			.selection select {
 				width: 100%;
-				cursor: pointer;
+				height: 100%;
+				z-index: 2;
 				text-overflow: ellipsis;
-				border: none;
-				outline: none;
-				background: transparent;
-				background-image: none;
-				box-shadow: none;
 				-webkit-appearance: none;
-				appearance: none;
-				font-size: 8vw;
-				text-indent: 5vw;
-				color: rgba(255, 255, 255, 0);
+				height: 100%;
+				border: none;
+				opacity: 0;
 			}
 			
-			selection select::-ms-expand {
+			.selection select::-ms-expand {
 				display: none;
 			}
 			
-			.selection.sel01 {
-				position: relative;
-				border: 1px solid #bbbbbb;
-				border-radius: 2px;
-				background: rgba(255, 255, 255, 0);
-			}
-			.selection.sel01::before {
+			.cityname {
+				grid-column: 2/3;
 				position: absolute;
-				top: 0.8em;
-				right: 0.9em;
-				width: 0;
-				height: 0;
-				padding: 0;
-				content: '';
-				border-left: 6px solid transparent;
-				border-right: 6px solid transparent;
-				border-top: 6px solid #666666;
-				pointer-events: none;
+				z-index: 1;
+				text-overflow: ellipsis;
+			}
+			
+			.arrow {
+				grid-column: 3/4;
+				position: absolute;
+				z-index: 1;
+			}
+			
+			.arrow i {
+				margin-bottom: 4vw;
 			}
 			
 			.comment {
-				grid-column: 2/6;
-				grid-row: 2/3;
-				font-size: 5vw;
-				background-color: rgba(255, 255, 255, 0);
-				vertical-align: middle;
+				grid-row: 2;
+				text-align: center;
+				display: grid;
+				align-items: center;
+				font-size: 120%;
 			}
 			
 			.daycount {
-				grid-column: 3/5;
-				grid-row: 3/4;
-				font-size: 15vw;
-				background-color: rgba(255, 255, 255, 0);
-				vertical-align: middle;
+				grid-row: 3;
+				text-align: center;
+				display: grid;
+				grid-template-rows: 5fr 1fr;
+				align-items: center;
 			}
 			
-			#hours {
-				grid-column: 1/3;
-			}
-		
-			#minutes { 
-				grid-column: 3/5;
+			.daycount .value1 {
+				grid-row: 1/2;
+				font-size: 650%;
 			}
 			
-			#seconds {
-				grid-column: 5/7;
+			.daycount .unit1 {
+				grid-row: 2/3;
+				font-size: 100%;
 			}
 			
-			#hours, #minutes, #seconds {
+			.timecount {
 				grid-row: 4;
-				background-color: rgba(255, 255, 255, 0);
-				font-size: 8vw;
-				vertical-align: middle;
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				grid-template-rows: 3fr 1fr;
+				align-items: center;
+				margin: 0px 10% 0px 10%;
+			}
+			
+			.timecount .value2 {
+				grid-row: 1/2;
+				text-align: center;
+				font-size: 300%;
+			}
+			
+			.timecount .unit2 {
+				grid-row: 2/3;
+				text-align: center;
+				font-size: 100%;
+			}
+			
+			.timecount .hours {
+				grid-column: 1/2;
+			}
+			
+			.timecount .minutes {
+				grid-column: 2/3;
+			}
+			
+			.timecount .seconds {
+				grid-column: 3/4;
+			}
+			
+			.row5 {
+				grid-row: 5;
+				position: absolute;
+				height: 100%;
+				width: 100%;
+				z-index: 1;
 			}
 			
 			.today {
-				grid-column: 2/6;
-				grid-row: 5/6;
-				font-size: 5vw;
-				background-color: rgba(255, 255, 255, 0);
-				align-self: center;
-				vertical-align: middle;
+				position: relative;
+				display: grid;
+				grid-template-columns: 1fr 1fr 1fr;
+				grid-template-rows: 3fr 1fr;
+				align-items: center;
+				text-align: center;
+				margin: 0px 30% 15% 30%;
+			}
+			
+			.bg3 {
+				grid-row: 5;
+				z-index: 0;
+				position: absolute;
+				width: 100%;
+				height: 100%;
+				background: radial-gradient(ellipse farthest-side at 50% 100%, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 100%);
+			}
+			
+			.today .value3 {
+				grid-row: 1/2;
+				font-size: 200%;
+			}
+			
+			.today .unit3 {
+				grid-row: 2/3;
+				font-size: 100%;
+			}
+			
+			.today .year {
+				grid-column: 1/2;
+			}
+			
+			.today .month {
+				grid-column: 2/3;
+			}
+			
+			.today .date {
+				grid-column: 3/4;
+			}
+			
+			.dev {
+				display: none;
 			}
 		</style>
 	</head>
 	<body onload="init()">
 		<div class="main">
-			<a class="geobutton" onclick="geo.getPosition()">
-				<div class="getlocation">
-					<i class="fas fa-map-marker-alt"></i>
+			<div class="bg0"></div>
+			<div class="bg1"></div>
+			<div class="bg2"></div>
+			<div class="input">
+				<a class="geobutton row1" onclick="geo.getPosition()">
+					<div class="getlocation row1">
+						<i class="fas fa-map-marker-alt"></i>
+					</div>
+				</a>
+				<div class="cityname row1">
+						<span id="selectedcity"></span>
 				</div>
-			</a>
-			<div class="selection sel01">
-				<select id="cities" onchange="display.init()"></select>
-			</div>
-			<div class="cityname">
-					<span id="selectedcity"></span>
-			</div>
-			<div class="arrow">
-				<span id="arrow">
+				<div class="arrow row1">
 					<i class="fas fa-sort-down"></i>
-				</span>
+				</div>
+				<div class="selection row1" onchange="display.init()">
+					<select id="cities"></select>
+				</div>
 			</div>
 			<div class="comment">
 				<span id="comment"></span>
 			</div>
 			<div class="daycount">
-				<span id="days"></span>
+				<span class="value1" id="days"></span>
+				<span class="unit1">日</span>
 			</div>
-			<span class="timecount" id="hours"></span>
-			<span class="timecount" id="minutes"></span>
-			<span class="timecount" id="seconds"></span>
-			<div class="today">
-				<span id="date"></span>
+			<div class="timecount">
+				<span class="value2 hours" id="hours"></span>
+				<span class="unit2 hours" id="jikan">時間</span>
+				<span class="value2 minutes" id="minutes"></span>
+				<span class="unit2 minutes" id="fun">分</span>
+				<span class="value2 seconds" id="seconds"></span>
+				<span class="unit2 seconds" id="byo">秒</span>
 			</div>
+			<div class="row5">
+				<div class="today">
+					<span class="value3 year" id="year"></span>
+					<span class="unit3 year">年</span>
+					<span class="value3 month" id="month"></span>
+					<span class="unit3 month">月</span>
+					<span class="value3 date" id="date"></span>
+					<span class="unit3 date">日</span>
+				</div>
+			</div>
+			<div class="bg3"></div>
 		</div>
 		<div class="dev">
 			<span>time zone difference adjusted</span>
 			<br>
-			<button type="button" onclick="dev()">dev function</button>
+			<button type="button">dev function</button>
 		</div>
 		<script type="text/javascript">
 			var settings = {
@@ -208,6 +288,9 @@
 				hoursId: 'hours',
 				minutesId: 'minutes',
 				secondsId: 'seconds',
+				yearId: 'year',
+				monthId: 'month',
+				dateId: 'date',
 				refreshRate: 1000,
 				getLocationOnLoad: true,
 			}
@@ -633,11 +716,14 @@
 				id2: "",
 				id3: "",
 				id4: "",
+				id5: "",
+				id6: "",
+				id7: "",
 				init: function() {
 					//console.log('display.init called');
 					display.message(display.id0);
 					display.timer(display.id1, display.id2, display.id3, display.id4);
-					display.today();
+					display.today(display.id5, display.id6, display.id7);
 				},
 				message: function(id0) {
 					//console.log('display.message called');
@@ -651,21 +737,23 @@
 				},
 				timer: function(id1, id2, id3, id4) {
 					//console.log('display.timer called');
-					ddd = timer.timer()[0] + "日";
-					dhh = timer.timer()[1] + "時間";
-					dmm = timer.timer()[2] + "分";
-					dss = timer.timer()[3] + "秒";
+					ddd = timer.timer()[0];
+					dhh = timer.timer()[1];
+					dmm = timer.timer()[2];
+					dss = timer.timer()[3];
 					document.getElementById(id1).innerText = ddd;
 					document.getElementById(id2).innerText = dhh;
 					document.getElementById(id3).innerText = dmm;
 					document.getElementById(id4).innerText = dss;
 				},
-				today: function() {
+				today: function(id5, id6, id7) {
 					//console.log('display.today called');
 					yyyy = now.ymd()[0];
 					mm = now.ymd()[1];
 					dd = now.ymd()[2];
-					document.getElementById('date').innerText = yyyy + "年" + mm + "月" + dd + "日";
+					document.getElementById(id5).innerText = yyyy;
+					document.getElementById(id6).innerText = mm;
+					document.getElementById(id7).innerText = dd;
 				}
 			}
 			
@@ -682,6 +770,9 @@
 				display.id2 = settings.hoursId;
 				display.id3 = settings.minutesId;
 				display.id4 = settings.secondsId;
+				display.id5 = settings.yearId;
+				display.id6 = settings.monthId;
+				display.id7 = settings.dateId;
 				display.init();
 				setInterval("display.init()", settings.refreshRate);
 				//display.init();
