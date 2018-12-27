@@ -705,6 +705,9 @@
 						dmin = timer.difft(6).getMinutes();
 						dsec = timer.difft(6).getSeconds();
 					}
+					if (dday > 7) {
+						dday = 0;
+					}
 					//console.log('timer.timer dday' + dday);
 					return	[dday, dhr, dmin, dsec];
 				}
