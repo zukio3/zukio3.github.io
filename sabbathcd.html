@@ -215,7 +215,7 @@
 				grid-template-rows: 3fr 1fr;
 				align-items: center;
 				text-align: center;
-				margin: 1% 35% 0px 35%;
+				margin: 2% 35% 0px 35%;
 				padding: 0px;
 			}
 			
@@ -514,6 +514,7 @@
 							if((pht>t4)&&(ht<t4)) { 
 								ans = hh + "時" + m + "分 日没(方位" + Math.floor(dr) +"度)\n" ;
 								target = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hh, m);
+							console.log(hh + 'hr ' + m + 'min');
 							}
 							pht = ht ;
 							pdr = dr ;
