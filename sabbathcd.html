@@ -10,8 +10,9 @@
 				margin: 5%;
 				background: #111;
 				font-family: Lato, Arial;
-				font-size: 100%;
+				font-size: 2vw;
 				background: url("https://zukio3.github.io/img/bookshelf.jpeg");
+				line-height: 1;
 			}
 			
 			span {
@@ -53,7 +54,7 @@
 				outline: 0.2vw solid rgba(255,255,255,0.7);
 				outline-offset: 0.5vw;
 				position: relative;
-				padding: 5% 0px 10% 0px;
+				padding: 5% 0px 5% 0px;
 			}
 			
 			.input {
@@ -61,8 +62,8 @@
 				display: grid;
 				grid-template-columns: 15% 1fr 15%;
 				margin: 0px 5% 0px 5%;
+				padding: 0px;
 				position: relative;
-				font-size: 100%%;
 			}
 			
 			.row1 {
@@ -76,6 +77,7 @@
 			
 			.geobutton {
 				grid-column: 1/2;
+				font-size: 170%;
 			}
 			
 			.selection {
@@ -108,12 +110,14 @@
 				position: absolute;
 				z-index: 1;
 				text-overflow: ellipsis;
+				font-size: 200%;
 			}
 			
 			.arrow {
 				grid-column: 3/4;
 				position: absolute;
 				z-index: 1;
+				font-size: 220%;
 			}
 			
 			.arrow i {
@@ -125,46 +129,55 @@
 				text-align: center;
 				display: grid;
 				align-items: center;
-				font-size: 100%%;
+				font-size: 130%;
 			}
 			
 			.daycount {
 				grid-row: 3;
 				text-align: center;
 				display: grid;
-				grid-template-rows: 5fr 1fr;
+				/*grid-template-rows: 3fr 1fr;*/
 				align-items: center;
+				position: relative;
 			}
 			
 			.daycount .value1 {
-				grid-row: 1/2;
-				font-size: 100%%;
+				/*grid-row: 1/2;*/
+				font-size: 500%;
+				position: absolute;
 			}
 			
 			.daycount .unit1 {
-				grid-row: 2/3;
-				font-size: 100%;
+				/*grid-row: 2/3;*/
+				font-size: 150%;
+				text-indent: 15%;
+				position: absolute;
+				margin-top: 7%;
 			}
 			
 			.timecount {
-				grid-row: 4;
+				grid-row: 4/5;
 				display: grid;
 				grid-template-columns: 1fr 1fr 1fr;
-				grid-template-rows: 3fr 1fr;
+				/*grid-template-rows: 3fr 1fr;*/
 				align-items: center;
-				margin: 0px 10% 0px 10%;
+				margin: 2% 10% 0px 10%;
+				padding: 0px;
+				
 			}
 			
 			.timecount .value2 {
-				grid-row: 1/2;
+				/*grid-row: 1/2;*/
 				text-align: center;
-				font-size: 100%%;
+				font-size: 250%;
+				
 			}
 			
 			.timecount .unit2 {
-				grid-row: 2/3;
+				/*grid-row: 2/3;*/
 				text-align: center;
 				font-size: 100%;
+				
 			}
 			
 			.timecount .hours {
@@ -194,7 +207,8 @@
 				grid-template-rows: 3fr 1fr;
 				align-items: center;
 				text-align: center;
-				margin: 0px 30% 0px 30%;
+				margin: 1% 30% 0px 30%;
+				padding: 0px;
 			}
 			
 			.bg3 {
@@ -208,12 +222,12 @@
 			
 			.today .value3 {
 				grid-row: 1/2;
-				font-size: 100%;
+				font-size: 180%;
 			}
 			
 			.today .unit3 {
 				grid-row: 2/3;
-				font-size: 100%;
+				font-size: 90%;
 			}
 			
 			.today .year {
