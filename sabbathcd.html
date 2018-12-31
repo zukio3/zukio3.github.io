@@ -181,9 +181,9 @@
 			
 			.timecount .unit2 {
 				grid-row: 1/2;
-				text-align: center;
+				text-align: left;
 				font-size: 100%;
-				text-indent: 45%;
+				text-indent: 70%;
 				margin-top: 13%;
 				
 			}
@@ -479,7 +479,7 @@
 				},
 				main: function(date, location) {
 					yy = date.getFullYear();
-					mm = date.getMonth();
+					mm = date.getMonth() + 1;
 					dd = date.getDate();
 					la = location[0];
 					lo = location[1];
@@ -510,11 +510,11 @@
 							t2 = tt - 12;
 							t3 = tt - 6;
 							t4 = sunset.sa(alt,ds);
-					   
+							
 							if((pht>t4)&&(ht<t4)) { 
 								ans = hh + "時" + m + "分 日没(方位" + Math.floor(dr) +"度)\n" ;
-								target = new Date(date.getFullYear(), date.getMonth(), date.getDate(), hh, m);
-							console.log(hh + 'hr ' + m + 'min');
+								target = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate(), hh, m);
+							//console.log(hh + 'hr ' + m + 'min');
 							}
 							pht = ht ;
 							pdr = dr ;
@@ -710,7 +710,7 @@
 					var adj = nw.getTimezoneOffset()/(-60) - locations.reader()[3];
 					var diff = sunset.main(date.getNextDay(day), locations.reader());
 					diff.setYear(diff.getFullYear() - nw.getFullYear());
-					diff.setMonth(diff.getMonth() - nw.getMonth());
+					diff.setMonth(diff.getMonth() - (nw.getMonth() + 1));
 					diff.setDate(diff.getDate() - nw.getDate());
 					diff.setHours(diff.getHours() - nw.getHours() + adj);
 					diff.setMinutes(diff.getMinutes() - nw.getMinutes());
