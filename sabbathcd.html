@@ -502,31 +502,28 @@
 					for(hh=0; hh<24; hh++) {
 						for(m=0; m<60; m++) {
 							for(sc=0; sc<60; sc++) {
-								for(fr=0; fr<10; fr++) {
-									sc = sc + fr/10;
-									m = m + sc/60;
-									t = sunset.jy(yy,mm,dd,hh,m,0,i);
-									th = sunset.sh(t,hh,m,0,lo,i);
-									ds = sunset.spds(t);
-									ls = sunset.spls(t);
-									alp = sunset.spal(t);
-									dlt = sunset.spdl(t); 
-									ht = sunset.soal(la,th,alp,dlt);
-									dr = sunset.sodr(la,th,alp,dlt);
-									tt = sunset.eandp(alt,ds);
-									t1 = tt - 18;
-									t2 = tt - 12;
-									t3 = tt - 6;
-									t4 = sunset.sa(alt,ds);
-									
-									if((pht>t4)&&(ht<t4)) { 
-										ans = hh + "時" + m + "分 日没(方位" + Math.floor(dr) +"度)\n" ;
-										target = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate(), hh, m, Math.floor(sc));
-									//console.log('pht ' + pht + ' t4 ' + t4 + ' ht ' + ht);
-									}
-									pht = ht ;
-									pdr = dr ;
+								m = m + sc/60;
+								t = sunset.jy(yy,mm,dd,hh,m,0,i);
+								th = sunset.sh(t,hh,m,0,lo,i);
+								ds = sunset.spds(t);
+								ls = sunset.spls(t);
+								alp = sunset.spal(t);
+								dlt = sunset.spdl(t); 
+								ht = sunset.soal(la,th,alp,dlt);
+								dr = sunset.sodr(la,th,alp,dlt);
+								tt = sunset.eandp(alt,ds);
+								t1 = tt - 18;
+								t2 = tt - 12;
+								t3 = tt - 6;
+								t4 = sunset.sa(alt,ds);
+								
+								if((pht>t4)&&(ht<t4)) { 
+									ans = hh + "時" + m + "分 日没(方位" + Math.floor(dr) +"度)\n" ;
+									target = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate(), hh, m, sc);
+								//console.log('pht ' + pht + ' t4 ' + t4 + ' ht ' + ht);
 								}
+								pht = ht ;
+								pdr = dr ;
 							}
 						}
 					}
