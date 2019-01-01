@@ -501,8 +501,8 @@
 					
 					for(hh=0; hh<24; hh++) {
 						for(m=0; m<60; m++) {
-							for(s=0; s<60; s++) {
-								m += s/60;
+							for(sc=0; sc<60; sc++) {
+								m = m + sc/60;
 								t = sunset.jy(yy,mm,dd,hh,m,0,i);
 								th = sunset.sh(t,hh,m,0,lo,i);
 								ds = sunset.spds(t);
@@ -519,12 +519,12 @@
 								
 								if((pht>t4)&&(ht<t4)) { 
 									ans = hh + "時" + m + "分 日没(方位" + Math.floor(dr) +"度)\n" ;
-									target = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate(), hh, m);
+									target = new Date(date.getFullYear(), date.getMonth() + 1, date.getDate(), hh, m, sc);
 								//console.log('pht ' + pht + ' t4 ' + t4 + ' ht ' + ht);
 								}
+								pht = ht ;
+								pdr = dr ;
 							}
-							pht = ht ;
-							pdr = dr ;
 						}
 					}
 					sunset.total = target;
