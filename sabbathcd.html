@@ -205,14 +205,18 @@
 			}
 			
 			.row5 {
-				grid-row: 5;
+				grid-row: 5/6;
 				position: absolute;
+				/*display: grid;
+				grid-template-rows: 1fr;
+				align-items: center;*/
 				height: 100%;
 				width: 100%;
 				z-index: 1;
 			}
 			
 			.today {
+				/*grid-row: 1/2;*/
 				position: relative;
 				display: grid;
 				grid-template-columns: 1.5fr 1fr 1fr;
